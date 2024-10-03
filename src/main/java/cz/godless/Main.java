@@ -1,3 +1,5 @@
+package cz.godless;
+
 import cz.godless.HikariCPDataSource;
 
 import java.sql.*;

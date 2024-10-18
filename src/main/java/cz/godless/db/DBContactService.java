@@ -45,6 +45,7 @@ public class DBContactService {
             return statement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
             System.out.println("Contact with this email or phone already exists!");
+            return 0;
         } catch (SQLException e) {
             logger.error("Error while creating a new contact.", e);
             return 0;

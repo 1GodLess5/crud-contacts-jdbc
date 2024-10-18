@@ -2,10 +2,7 @@ package cz.godless.db;
 
 import org.slf4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +43,8 @@ public class DBContactService {
             statement.setString(3, phone);
 
             return statement.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Contact with this email or phone already exists!");
         } catch (SQLException e) {
             logger.error("Error while creating a new contact.", e);
             return 0;

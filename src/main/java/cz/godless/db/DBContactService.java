@@ -12,6 +12,7 @@ public class DBContactService {
     private static final String READ_ALL = "SELECT * FROM contact";
     private static final String CREATE = "INSERT INTO contact (name, email, phone) VALUES (?, ?, ?)";
     private static final String DELETE = "DELETE FROM contact WHERE id = ?";
+    private static final String UPDATE = "UPDATE contact SET name = ?, email = ?, phone = ? WHERE id = ?";
 
     private static final Logger logger = getLogger(DBContactService.class);
 
@@ -64,4 +65,24 @@ public class DBContactService {
             return 0;
         }
     }
+
+    public int update (Contact contact) {
+        try (Connection connection = HikariCPDataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE)) {
+
+            statement.setString(1, contact.getName());
+            statement.setString(2, contact.getEmail());
+            statement.setString(3, contact.getPhone());
+            statement.setInt(4, contact.getId());
+
+            return statement.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Contact with this email or phone already exists!");
+            return 0;
+        } catch (SQLException e) {
+            logger.error("Error while creating a new contact.", e);
+            return 0;
+        }
+    }
+
 }

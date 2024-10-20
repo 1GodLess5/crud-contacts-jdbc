@@ -22,7 +22,7 @@ public class CRUDManager {
             System.out.println("1. Edit contacts");
             System.out.println("2. Add contacts");
             System.out.println("3. Delete contacts");
-            System.out.println("4. Search contacts");
+            System.out.println("4. Search contacts by email");
             System.out.println("5. Exit");
 
             final int choice = InputUtils.readInt();
@@ -31,7 +31,7 @@ public class CRUDManager {
                 case 1 -> editContact();
                 case 2 -> createContact();
                 case 3 -> deleteContact();
-                case 4 -> System.out.println("To be implemented.");
+                case 4 -> searchContactsByEmail();
                 case 5 -> {
                     System.out.println("Good bye!");
                     return;
@@ -106,9 +106,11 @@ public class CRUDManager {
 
             final Optional<Contact> contactToEdit = editContactFromInput(contacts.get(choice - 1));
             if (contactToEdit.isPresent()) {
-                // TODO edit contact v DB
+                if (contactService.edit(contactToEdit.get()) > 0) {
+                    System.out.println("Contact edited successfully.");
+                    return;
+                }
             }
-
         }
     }
 
@@ -146,5 +148,17 @@ public class CRUDManager {
                 default -> System.out.println("Invalid choice!");
             }
         }
+    }
+
+    private void searchContactsByEmail() {
+        System.out.println("Enter email: ");
+        final String email = InputUtils.readString();
+        final List<Contact> contacts = contactService.searchByEmail(email);
+        if (contacts.isEmpty()) {
+            System.out.println("No contacts found.");
+            return;
+        }
+        System.out.println("Found " + contacts.size() + " contacts:");
+        contacts.forEach(System.out::println);
     }
 }

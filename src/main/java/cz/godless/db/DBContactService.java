@@ -66,7 +66,7 @@ public class DBContactService {
         }
     }
 
-    public int update (Contact contact) {
+    public int edit (Contact contact) {
         try (Connection connection = HikariCPDataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE)) {
 

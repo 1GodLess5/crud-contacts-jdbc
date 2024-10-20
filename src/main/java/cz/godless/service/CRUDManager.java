@@ -5,6 +5,7 @@ import cz.godless.db.DBContactService;
 import cz.godless.utility.InputUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CRUDManager {
     private final DBContactService contactService;
@@ -27,7 +28,7 @@ public class CRUDManager {
             final int choice = InputUtils.readInt();
             switch (choice) {
                 case 0 -> printAllContacts();
-                case 1 -> System.out.println("To be implemented.");
+                case 1 -> editContact();
                 case 2 -> createContact();
                 case 3 -> deleteContact();
                 case 4 -> System.out.println("To be implemented.");
@@ -82,5 +83,68 @@ public class CRUDManager {
     private void printAllContacts() {
         final List<Contact> contacts = contactService.readAll();
         contacts.forEach(System.out::println);
+    }
+
+    public void editContact() {
+        final List<Contact> contacts = contactService.readAll();
+
+        int choice;
+        while (true) {
+            System.out.println("0. Cancel");
+            for(int i = 0; i < contacts.size(); i++) {
+                System.out.println((i + 1) + ". " + contacts.get(i));
+            }
+
+            System.out.println("Enter number of contact you want to delete: ");
+            choice = InputUtils.readInt();
+            if(choice == 0) {
+                return;
+            } else if(choice < 1 || choice > contacts.size()) {
+                System.out.println("Invalid choice!");
+                continue;
+            }
+
+            final Optional<Contact> contactToEdit = editContactFromInput(contacts.get(choice - 1));
+            if (contactToEdit.isPresent()) {
+                // TODO edit contact v DB
+            }
+
+        }
+    }
+
+    private Optional<Contact> editContactFromInput(Contact contact) {
+        String name = contact.getName();
+        String email = contact.getEmail();
+        String phone = contact.getPhone();
+
+        while (true) {
+            System.out.println("0. Back");
+            System.out.println("1. Edit name (" + name + ")");
+            System.out.println("2. Edit email (" + name + ")");
+            System.out.println("3. Edit phone (" + name + ")");
+
+            final int choice = InputUtils.readInt();
+            switch (choice) {
+                case 0 -> {
+                    return Optional.empty();
+                }
+                case 1 -> {
+                    System.out.println("Enter new name: ");
+                    name = InputUtils.readString();
+                    return Optional.of(new Contact(contact.getId(), name, email, phone));
+                }
+                case 2 -> {
+                    System.out.println("Enter new email: ");
+                    email = InputUtils.readString();
+                    return Optional.of(new Contact(contact.getId(), name, email, phone));
+                }
+                case 3 -> {
+                    System.out.println("Enter new phone: ");
+                    phone = InputUtils.readString();
+                    return Optional.of(new Contact(contact.getId(), name, email, phone));
+                }
+                default -> System.out.println("Invalid choice!");
+            }
+        }
     }
 }

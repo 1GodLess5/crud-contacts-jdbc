@@ -1,6 +1,5 @@
 package cz.godless;
 
-import cz.godless.db.DBContactService;
 import cz.godless.service.CRUDManager;
 
 public class Main {

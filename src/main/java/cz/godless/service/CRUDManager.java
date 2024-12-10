@@ -122,8 +122,8 @@ public class CRUDManager {
         while (true) {
             System.out.println("0. Back");
             System.out.println("1. Edit name (" + name + ")");
-            System.out.println("2. Edit email (" + name + ")");
-            System.out.println("3. Edit phone (" + name + ")");
+            System.out.println("2. Edit email (" + email + ")");
+            System.out.println("3. Edit phone (" + phone + ")");
 
             final int choice = InputUtils.readInt();
             switch (choice) {
